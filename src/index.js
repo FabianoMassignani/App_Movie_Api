@@ -56,6 +56,7 @@ app.get("/shutdown", function (req, res) {
     function (value, key, callback) {
       value.destroy(callback);
     },
+
     function () {
       console.log("Stopping");
       process.exit();
@@ -64,10 +65,7 @@ app.get("/shutdown", function (req, res) {
 });
 
 app.get("/add", function (req, res) {
-  var torrent = addTorrent(
-    req.query.magnet_link,
-    req.query.download_dir || "."
-  );
+  var torrent = addTorrent(req.query.magnet_link);
 
   torrent.addConnection();
 
@@ -83,10 +81,7 @@ app.get("/add", function (req, res) {
 });
 
 app.get("/video", function (req, res) {
-  var torrent = addTorrent(
-    req.query.magnet_link,
-    req.query.download_dir || "."
-  );
+  var torrent = addTorrent(req.query.magnet_link);
 
   torrent.addConnection();
 
@@ -156,12 +151,12 @@ app.get("/video", function (req, res) {
   }
 });
 
-function addTorrent(magnetLink, downloadDir) {
+function addTorrent(magnetLink) {
   var magnetData = magnetUri.decode(magnetLink);
 
   if (!(magnetData.infoHash in torrents)) {
     var torrent = {
-      engine: torrentStream(magnetLink, { path: downloadDir }),
+      engine: torrentStream(magnetLink, { path: "." }),
       dn: magnetData.dn,
       infoHash: magnetData.infoHash,
       state: "metadata",

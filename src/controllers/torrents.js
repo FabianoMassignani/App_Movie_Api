@@ -3,7 +3,7 @@ const xtorrent = require("xtorrent");
 const getmagnet = require("get-magnet");
 const stringSimilarity = require("string-similarity");
 
-module.exports.getMoviesTorrents = async (req, res, next) => {
+module.exports.getTorrents = async (req, res, next) => {
   try {
     //const search = req.query.search;
     const search = "The Dark Knight";
@@ -126,33 +126,6 @@ module.exports.getMoviesTorrents = async (req, res, next) => {
       torrents: [],
     };
 
-    res.status(500).send(response);
-  }
-};
-
-module.exports.getTVTorrents = async (req, res, next) => {
-  try {
-    let serial = req.query.serial;
-    let Seasom = req.query.Seasom;
-    let Episode = req.query.Episode;
-    let torrentsEnd = [];
-    let search =
-      serial +
-      " S" +
-      (Seasom + "").padStart(2, "0") +
-      "E" +
-      (Episode + "").padStart(2, "0");
-
-    const response = {
-      torrents: torrentsEnd,
-    };
-
-    res.header("Access-Control-Allow-Origin", "*");
-    res.status(201).send(response);
-  } catch (Erro) {
-    const response = {
-      message: Erro,
-    };
     res.status(500).send(response);
   }
 };

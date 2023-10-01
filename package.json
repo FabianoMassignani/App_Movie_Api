@@ -25,6 +25,7 @@
     "opensubtitles-api": "^5.1.2",
     "opensubtitles-client": "^2.5.0",
     "path": "^0.12.7",
+    "prettysize": "^2.0.0",
     "public-ip": "^6.0.1",
     "stream-meter": "^1.0.4",
     "string-similarity": "^4.0.4",

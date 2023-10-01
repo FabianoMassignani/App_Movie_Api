@@ -7,6 +7,66 @@ module.exports.getTorrents = async (req, res, next) => {
   try {
     //const search = req.query.search;
     const search = "The Dark Knight";
+    const provider = "1337x";
+    const numberTorrents = req.query.numberTorrent || 20;
+    const similarity = req.query.similarity || 0.3;
+
+    if (!search) {
+      const response = {
+        message: "Search not found",
+        torrents: [],
+      };
+
+      res.status(401).send(response);
+    }
+
+    TorrentSearchApi.enableProvider(provider);
+
+    const [data] = await Promise.all([
+      TorrentSearchApi.search([provider], search, "All", numberTorrents),
+    ]);
+
+    const torrents = await Promise.all(
+      data.map(async (value) => {
+        try {
+          const response = await xtorrent.info(value.desc);
+
+          return {
+            title: value.title,
+            size: value.size,
+            seeds: value.seeds,
+            magnet: response.download.magnet,
+          };
+        } catch {
+          return {};
+        }
+      })
+    );
+
+    torrents.sort(function (a, b) {
+      return a.seeds > b.seeds ? -1 : a.seeds < b.seeds ? 1 : 0;
+    });
+
+    const response = {
+      message: "Torrents found",
+      torrents: torrents,
+    };
+
+    res.status(201).send(response);
+  } catch (err) {
+    const response = {
+      message: err.message,
+      torrents: [],
+    };
+
+    res.status(500).send(response);
+  }
+};
+
+module.exports.getTorrents2 = async (req, res, next) => {
+  try {
+    //const search = req.query.search;
+    const search = "The Dark Knight";
     const provider = req.query.provider || "1337x";
     const numberTorrents = req.query.numberTorrent || 10;
     const similarity = req.query.similarity || 0.3;
@@ -92,8 +152,6 @@ module.exports.getTorrents = async (req, res, next) => {
 
     torrents.forEach((torrent, index) => {
       let { title, seeds, size, magnet } = torrent;
-
-      if (title.length > 40) title = title.substring(0, title.length / 2);
 
       const similarityTorrrent = stringSimilarity.compareTwoStrings(
         search,

@@ -12,14 +12,8 @@ const pump = require("pump");
 const rangeParser = require("range-parser");
 const streamMeter = require("stream-meter");
 const torrentStream = require("torrent-stream");
-const subtitleRouter = require("./routes/subtitle");
-const torrentsRouter = require("./routes/torrents");
 
 const port = 3001;
-let PRELOAD_RATIO = 0.001;
-let inactivityPauseTimeout = 3;
-let inactivityRemoveTimeout = 5;
-let keep = false;
 
 const app = express();
 
@@ -27,18 +21,19 @@ app.set("json spaces", 2);
 app.use(express.json());
 app.use(cors());
 
-app.use("/subtitle", subtitleRouter);
-app.use("/torrent", torrentsRouter);
-
 http.createServer(app);
-
-const torrents = {};
 
 app.listen(port, () => {
   const ipAddress = address();
   process.env.HOST = "0.0.0.0";
   console.log(`Servidor iniciado em http://${ipAddress}:${port}`);
 });
+
+let PRELOAD_RATIO = 0.001;
+let inactivityPauseTimeout = 3;
+let inactivityRemoveTimeout = 5;
+let keep = false;
+const torrents = {};
 
 app.get("/", function (req, res) {
   let torrents = [];

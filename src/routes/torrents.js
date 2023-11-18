@@ -1,7 +1,0 @@
-const express = require("express");
-const router = express.Router();
-const torrents = require("../controllers/torrents");
-
-router.get("/", torrents.getTorrents);
-
-module.exports = router;

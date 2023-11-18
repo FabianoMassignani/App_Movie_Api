@@ -1,7 +1,5 @@
 ## Features
 
-- Get torrents Movies & Tvs
-- Get subtitles Movies & Tvs
 - Stream & Download torrents
 
 ## Start

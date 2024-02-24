@@ -23,6 +23,9 @@ app.use(cors());
 
 http.createServer(app);
 
+const subtitleRouter = require("./routes/subtitle");
+const torrentsRouter = require("./routes/torrents");
+
 app.listen(port, () => {
   const ipAddress = address();
   process.env.HOST = "0.0.0.0";
@@ -34,6 +37,10 @@ let inactivityPauseTimeout = 3;
 let inactivityRemoveTimeout = 5;
 let keep = false;
 const torrents = {};
+
+
+app.use("/subtitle", subtitleRouter);
+app.use("/torrent", torrentsRouter);
 
 app.get("/", function (req, res) {
   let torrents = [];

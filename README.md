@@ -1,6 +1,6 @@
 ## Features
 
-- Stream & Download torrents
+- Stream & Download 
 
 ## Start
 
